@@ -53,21 +53,56 @@ checks.forEach((check) => check.addEventListener('change', updateChecklist));
 
 // Add future footer badges here; the marquee duplicates the set for a seamless loop.
 const partnerBadges = [
-  { label: 'Hermes Agent', url: 'https://hermesagent.homes/' }
+  {
+    name: 'Hermes Agent',
+    description: 'An open-source AI agent platform',
+    url: 'https://hermesagent.homes/',
+    icon: './hermes-agent.svg'
+  }
 ];
 
 const badgeTrack = document.querySelector('#badge-track');
 if (badgeTrack) {
-  for (let group = 0; group < 8; group += 1) {
-    partnerBadges.forEach(({ label, url }) => {
+  for (let groupIndex = 0; groupIndex < 2; groupIndex += 1) {
+    const group = document.createElement('div');
+    group.className = 'badge-group';
+    if (groupIndex === 1) group.setAttribute('aria-hidden', 'true');
+
+    for (let repeat = 0; repeat < 4; repeat += 1) {
+      partnerBadges.forEach(({ name, description, url, icon }) => {
       const link = document.createElement('a');
       link.className = 'project-badge';
       link.href = url;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
-      link.textContent = label;
-      badgeTrack.append(link);
-    });
+      if (groupIndex !== 0 || repeat !== 0) {
+        link.tabIndex = -1;
+        link.setAttribute('aria-hidden', 'true');
+      }
+
+      const image = document.createElement('img');
+      image.src = icon;
+      image.alt = '';
+      image.width = 40;
+      image.height = 40;
+
+      const copy = document.createElement('span');
+      copy.className = 'project-badge-copy';
+      const title = document.createElement('strong');
+      title.textContent = name;
+      const summary = document.createElement('span');
+      summary.textContent = description;
+      copy.append(title, summary);
+
+      const arrow = document.createElement('span');
+      arrow.className = 'project-badge-arrow';
+      arrow.setAttribute('aria-hidden', 'true');
+      arrow.textContent = '→';
+      link.append(image, copy, arrow);
+      group.append(link);
+      });
+    }
+    badgeTrack.append(group);
   }
 }
 
