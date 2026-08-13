@@ -1,5 +1,6 @@
 .git
 .gitignore
-Dockerfile
+.github
 node_modules
-.DS_Store
+npm-debug.log
+README.md
